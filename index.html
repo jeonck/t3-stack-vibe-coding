@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>T3 Stack Vibe Coding Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f6f7f5;
+    --surface:#ffffff;
+    --surface-2:#eef1ee;
+    --ink:#1b2220;
+    --ink-2:#4c5854;
+    --ink-3:#71807b;
+    --line:#dde3de;
+    --accent:#0c7a6a;
+    --accent-ink:#ffffff;
+    --accent-soft:#e0f2ec;
+    --warn:#9a5b00;
+    --warn-soft:#fdf0d8;
+    --bad:#b3352c;
+    --bad-soft:#fbe9e7;
+    --good:#0c7a6a;
+    --code-bg:#101613;
+    --code-ink:#d9e4dc;
+    --code-dim:#8fa398;
+    --code-accent:#7fe3c3;
+    --code-bad:#ff9d94;
+    --code-key:#a8c7fa;
+    --radius:10px;
+    --maxw:1060px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0d1110;
+      --surface:#151b19;
+      --surface-2:#1b2320;
+      --ink:#e7edea;
+      --ink-2:#aebbb6;
+      --ink-3:#7e8f89;
+      --line:#28322e;
+      --accent:#2ec9ae;
+      --accent-ink:#06231d;
+      --accent-soft:#123129;
+      --warn:#f0b45a;
+      --warn-soft:#33270f;
+      --bad:#ff9d94;
+      --bad-soft:#3a1b18;
+      --good:#2ec9ae;
+      --code-bg:#0a0e0c;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{animation:none!important;transition:none!important} }
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:16.5px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  body[data-lang="en"] .ko{display:none!important}
+  body[data-lang="ko"] .en{display:none!important}
+  code,kbd,.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+  a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+  a:hover{text-decoration-thickness:2px}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-in{max-width:var(--maxw);margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brand{font-weight:700;font-size:15px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none}
+  .brand .mark{
+    width:26px;height:26px;border-radius:7px;background:var(--ink);color:var(--bg);
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;flex:none;
+  }
+  .topnav{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+  .topnav a{color:var(--ink-2);text-decoration:none;font-size:13.5px;font-weight:500;padding:8px 10px;border-radius:7px;min-height:36px;display:inline-flex;align-items:center}
+  .topnav a:hover{background:var(--surface-2);color:var(--ink)}
+  .langtoggle{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface);flex:none}
+  .langtoggle button{
+    border:0;background:transparent;color:var(--ink-2);cursor:pointer;
+    font:inherit;font-size:13.5px;font-weight:600;padding:8px 14px;min-height:38px;min-width:52px;
+  }
+  .langtoggle button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+  .ghlink{font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none;padding:8px 4px;min-height:36px;display:inline-flex;align-items:center}
+
+  /* ---------- layout ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px 90px}
+  section{scroll-margin-top:84px;margin-top:64px}
+  .sec-head{margin-bottom:20px}
+  .sec-no{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--accent);font-weight:600;letter-spacing:.04em}
+  h2{font-size:clamp(24px,3.4vw,31px);line-height:1.25;letter-spacing:-.02em;margin:6px 0 8px;font-weight:700}
+  .sec-lede{color:var(--ink-2);max-width:68ch;margin:0}
+  h3{font-size:18px;margin:26px 0 8px;letter-spacing:-.01em}
+  p{margin:0 0 14px}
+  .muted{color:var(--ink-2)}
+  .small{font-size:14px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:56px 0 8px}
+  .hero h1{font-size:clamp(34px,5.6vw,54px);line-height:1.12;letter-spacing:-.03em;margin:0 0 16px;font-weight:700;max-width:16ch}
+  body[data-lang="ko"] .hero h1{max-width:20ch;line-height:1.22}
+  .hero .lede{font-size:clamp(17px,2.2vw,19.5px);color:var(--ink-2);max-width:62ch;margin:0 0 26px}
+  .cmdbox{
+    display:flex;align-items:center;gap:10px;background:var(--code-bg);color:var(--code-ink);
+    border-radius:var(--radius);padding:14px 16px;max-width:560px;flex-wrap:wrap;
+  }
+  .cmdbox .prompt{color:var(--code-accent);font-family:"IBM Plex Mono",monospace;font-weight:600}
+  .cmdbox code{font-size:15.5px;flex:1;min-width:200px;word-break:break-all}
+  .copybtn{
+    border:1px solid #33413a;background:#1a221e;color:#d9e4dc;border-radius:7px;cursor:pointer;
+    font:inherit;font-size:13px;font-weight:600;padding:8px 13px;min-height:38px;flex:none;
+  }
+  .copybtn:hover{background:#232e29}
+  .copybtn.light{border-color:var(--line);background:var(--surface);color:var(--ink)}
+  .copybtn.light:hover{background:var(--surface-2)}
+  .copybtn.solid{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .chip{font-size:13px;font-weight:500;color:var(--ink-2);border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px}
+  .chip b{color:var(--ink);font-weight:600}
+
+  /* ---------- cards / grids ---------- */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media (max-width:760px){.grid3,.grid2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .card h3{margin-top:0;font-size:16.5px}
+  .card p:last-child{margin-bottom:0}
+  .card .tag{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--bad);display:block;margin-bottom:8px}
+  .card .tag.good{color:var(--good)}
+
+  /* ---------- stack table ---------- */
+  .tablewrap{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  table{width:100%;border-collapse:collapse;font-size:15.5px}
+  th,td{text-align:left;padding:13px 16px;vertical-align:top}
+  thead th{background:var(--surface-2);font-size:13px;font-weight:600;color:var(--ink-2);border-bottom:1px solid var(--line)}
+  tbody tr+tr td{border-top:1px solid var(--line)}
+  td.piece{font-weight:600;white-space:nowrap}
+  td.piece .mono{font-weight:600}
+  @media (max-width:560px){
+    td.piece{white-space:normal}
+    th,td{padding:11px 12px}
+  }
+
+  /* ---------- flow diagram ---------- */
+  .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:6px 0 4px}
+  .flow .node{
+    flex:1 1 130px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px 14px 12px;text-align:center;
+  }
+  .flow .node .n-name{font-weight:700;font-size:15px}
+  .flow .node .n-sub{font-size:12.5px;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;margin-top:2px}
+  .flow .arrow{display:flex;align-items:center;justify-content:center;padding:0 5px;color:var(--accent);font-weight:700;flex:0 0 auto}
+  .flow .arrow span{font-size:11px;font-family:"IBM Plex Mono",monospace;color:var(--ink-3);font-weight:500;text-align:center}
+  @media (max-width:640px){
+    .flow{flex-direction:column}
+    .flow .arrow{padding:5px 0;transform:rotate(90deg)}
+    .flow .arrow span{display:none}
+  }
+  .flow-note{font-size:14px;color:var(--ink-2);margin-top:10px}
+
+  /* ---------- code blocks ---------- */
+  .codeblock{background:var(--code-bg);border-radius:var(--radius);overflow:hidden;margin:14px 0}
+  .codeblock .cb-head{
+    display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid #263029;
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--code-dim);flex-wrap:wrap;
+  }
+  .codeblock .cb-head .fname{color:var(--code-ink);font-weight:500}
+  .codeblock pre{margin:0;padding:16px;overflow-x:auto;font-family:"IBM Plex Mono",monospace;font-size:13.8px;line-height:1.7;color:var(--code-ink)}
+  .codeblock .k{color:var(--code-key)}
+  .codeblock .s{color:#f2c98a}
+  .codeblock .c{color:var(--code-dim)}
+  .codeblock .t{color:var(--code-accent)}
+  .errline{display:none;background:#3a1b18;color:#ffb4ab;padding:10px 16px;font-family:"IBM Plex Mono",monospace;font-size:13px;border-top:1px solid #5a2a25}
+  .errline.show{display:block}
+  .errline .x{color:#ff8a80;font-weight:700}
+  .okline{display:none;background:#0f2c25;color:#7fe3c3;padding:10px 16px;font-family:"IBM Plex Mono",monospace;font-size:13px;border-top:1px solid #1d4a3e}
+  .okline.show{display:block}
+  .demo-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 4px}
+  .runbtn{
+    border:0;border-radius:8px;background:var(--accent);color:var(--accent-ink);cursor:pointer;
+    font:inherit;font-weight:700;font-size:14.5px;padding:11px 18px;min-height:44px;
+  }
+  .runbtn.secondary{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+  .runbtn:disabled{opacity:.55;cursor:wait}
+  .demo-status{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-3)}
+
+  /* ---------- rule quote ---------- */
+  .rulecard{background:var(--ink);color:var(--bg);border-radius:14px;padding:26px 26px 22px}
+  @media (prefers-color-scheme: dark){ .rulecard{background:#e7edea;color:#101613} }
+  .rulecard blockquote{margin:0;font-size:clamp(18px,2.6vw,22px);line-height:1.55;font-weight:600;letter-spacing:-.01em}
+  .rulecard .rule-ko{margin-top:14px;padding-top:14px;border-top:1px solid color-mix(in srgb, currentColor 25%, transparent);font-size:15.5px;font-weight:500;opacity:.85}
+  .rulecard .rule-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .rulecard .copybtn{border-color:color-mix(in srgb, currentColor 40%, transparent);background:transparent;color:inherit}
+  .rulecard .copybtn:hover{background:color-mix(in srgb, currentColor 12%, transparent)}
+  .rulepoints{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+  @media (max-width:760px){.rulepoints{grid-template-columns:1fr}}
+  .rulepoint{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .rulepoint .rp-n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);font-weight:600}
+  .rulepoint h3{margin:4px 0 6px;font-size:16px}
+  .rulepoint p{font-size:14.5px;color:var(--ink-2);margin:0}
+
+  /* ---------- steps ---------- */
+  .steps{list-style:none;margin:0;padding:0;counter-reset:step}
+  .steps li{
+    display:flex;gap:16px;padding:16px 0;border-top:1px solid var(--line);
+  }
+  .steps li:first-child{border-top:0;padding-top:4px}
+  .steps .num{
+    counter-increment:step;flex:none;width:34px;height:34px;border-radius:50%;
+    border:1.5px solid var(--accent);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;
+    font-family:"IBM Plex Mono",monospace;margin-top:2px;
+  }
+  .steps .num::before{content:counter(step)}
+  .steps h3{margin:0 0 4px;font-size:16.5px}
+  .steps p{margin:0;color:var(--ink-2);font-size:15.5px;max-width:70ch}
+  .steps code{background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.88em}
+
+  /* ---------- use / skip ---------- */
+  .usecard{border-radius:var(--radius);padding:20px;border:1px solid var(--line);background:var(--surface)}
+  .usecard.yes{border-top:3px solid var(--good)}
+  .usecard.no{border-top:3px solid var(--bad)}
+  .usecard h3{margin-top:0}
+  .usecard ul{margin:0;padding-left:20px;color:var(--ink-2)}
+  .usecard li{margin-bottom:8px}
+  .usecard li:last-child{margin-bottom:0}
+  .usecard li b{color:var(--ink)}
+
+  /* ---------- skill ---------- */
+  .skill-head{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+  .skill-badge{
+    font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;
+    background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:8px 12px;word-break:break-all;
+  }
+  details.skillfile{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;margin-top:16px}
+  details.skillfile summary{
+    cursor:pointer;padding:14px 18px;font-weight:600;font-size:15px;min-height:48px;
+    display:flex;align-items:center;gap:10px;list-style:none;
+  }
+  details.skillfile summary::-webkit-details-marker{display:none}
+  details.skillfile summary .chev{margin-left:auto;color:var(--ink-3);transition:transform .2s}
+  details.skillfile[open ] summary .chev{transform:rotate(180deg)}
+  details.skillfile .skill-body{border-top:1px solid var(--line)}
+  details.skillfile pre{
+    margin:0;padding:18px;max-height:520px;overflow:auto;background:var(--code-bg);color:var(--code-ink);
+    font-family:"IBM Plex Mono",monospace;font-size:12.8px;line-height:1.65;white-space:pre-wrap;word-break:break-word;
+  }
+  .skill-actions{display:flex;gap:10px;flex-wrap:wrap;padding:14px 18px;border-top:1px solid var(--line);background:var(--surface)}
+
+  /* ---------- repos ---------- */
+  .repo{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;text-decoration:none;color:var(--ink)}
+  .repo:hover{border-color:var(--accent)}
+  .repo .r-name{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:15.5px;color:var(--accent);word-break:break-all}
+  .repo p{margin:6px 0 0;color:var(--ink-2);font-size:14.5px}
+  .repo .r-meta{font-size:12.5px;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;margin-top:10px;display:block}
+
+  .callout{background:var(--warn-soft);border-radius:var(--radius);padding:16px 18px;font-size:15px}
+  .callout b{color:var(--warn)}
+  @media (prefers-color-scheme: dark){ .callout b{color:var(--warn)} }
+  .callout p{margin:0}
+
+  footer{margin-top:80px;border-top:1px solid var(--line);padding-top:22px;color:var(--ink-3);font-size:13.5px}
+  footer p{margin:0 0 6px}
+
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:var(--bg);border-radius:9px;padding:11px 18px;font-size:14px;font-weight:600;
+    opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99;max-width:90vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  p code, li code, td code{background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.88em}
+</style>
+</head>
+<body data-lang="en">
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#top"><span class="mark">T3</span><span>T3 Stack Vibe Coding Guide</span></a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#stack"><span class="en">Stack</span><span class="ko">스택 구성</span></a>
+      <a href="#typesafety"><span class="en">Type safety</span><span class="ko">타입 안전성</span></a>
+      <a href="#rules"><span class="en">AI rules</span><span class="ko">AI 규칙</span></a>
+      <a href="#workflow"><span class="en">Workflow</span><span class="ko">워크플로</span></a>
+      <a href="#skill"><span class="en">The skill</span><span class="ko">스킬</span></a>
+      <a href="#repos"><span class="en">Repos</span><span class="ko">레포</span></a>
+    </nav>
+    <div class="langtoggle" role="group" aria-label="Language / 언어">
+      <button type="button" id="btn-en" aria-pressed="true">EN</button>
+      <button type="button" id="btn-ko" aria-pressed="false">한글</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" id="top">
+
+  <!-- ================= HERO ================= -->
+  <div class="hero">
+    <h1>
+      <span class="en">Vibe coding that doesn&rsquo;t tangle as it grows</span>
+      <span class="ko">기능이 늘어도 꼬이지 않는 바이브코딩</span>
+    </h1>
+    <p class="lede">
+      <span class="en">Ask an AI to build a web service and the screens come out fine. Then login, a database, and payments get attached — and the code starts to tangle. The T3 Stack fixes the stack <em>before</em> the AI writes a line: one type definition flows from the database through the server to the screen, so when the AI changes the structure, the type checker catches it first.</span>
+      <span class="ko">AI에게 웹 서비스를 만들라고 하면 화면은 잘 나온다. 그런데 로그인·데이터베이스·결제가 붙는 순간 코드가 꼬이기 시작한다. T3 Stack은 AI가 코드를 쓰기 <em>전에</em> 스택을 정해두는 방법이다. 데이터베이스부터 서버를 거쳐 화면까지 타입 정의 하나가 이어지므로, AI가 구조를 바꿔도 타입 검사가 먼저 걸러낸다.</span>
+    </p>
+    <div class="cmdbox">
+      <span class="prompt">$</span>
+      <code id="scaffold-cmd">npm create t3-app@latest</code>
+      <button type="button" class="copybtn" data-copy-target="scaffold-cmd"><span class="en">Copy</span><span class="ko">복사</span></button>
+    </div>
+    <div class="chips">
+      <span class="chip"><span class="en">Requires</span><span class="ko">필요 환경</span> <b>Node.js 20+</b></span>
+      <span class="chip"><b>t3-oss/create-t3-app</b></span>
+      <span class="chip"><span class="en">License</span><span class="ko">라이선스</span> <b>MIT</b></span>
+      <span class="chip"><span class="en">Every piece is optional</span><span class="ko">구성품은 전부 선택 사항</span></span>
+    </div>
+  </div>
+
+  <!-- ================= 1. THE PROBLEM ================= -->
+  <section id="problem">
+    <div class="sec-head">
+      <span class="sec-no">01</span>
+      <h2><span class="en">The problem: screens are easy, services are not</span><span class="ko">문제: 화면은 쉬운데, 서비스는 어렵다</span></h2>
+      <p class="sec-lede">
+        <span class="en">Vibe coding — describing what you want and letting an AI write the code — is fast at visible things. The trouble starts where pieces connect.</span>
+        <span class="ko">바이브코딩, 즉 원하는 것을 말로 설명하면 AI가 코드를 써주는 방식은 눈에 보이는 부분에서 빠르다. 문제는 조각들이 서로 연결되는 지점에서 시작된다.</span>
+      </p>
+    </div>
+    <div class="grid3">
+      <div class="card">
+        <span class="tag"><span class="en">EASY</span><span class="ko">쉬운 부분</span></span>
+        <h3><span class="en">Screens come out well</span><span class="ko">화면은 잘 나온다</span></h3>
+        <p class="muted"><span class="en">Landing pages, forms, and layouts are self-contained. The AI can generate them in one pass and they look right immediately.</span><span class="ko">랜딩 페이지, 입력 폼, 레이아웃은 그 자체로 완결된다. AI가 한 번에 만들어내도 바로 그럴듯하게 보인다.</span></p>
+      </div>
+      <div class="card">
+        <span class="tag"><span class="en">WHERE IT BREAKS</span><span class="ko">꼬이는 지점</span></span>
+        <h3><span class="en">Login · DB · payments</span><span class="ko">로그인 · DB · 결제</span></h3>
+        <p class="muted"><span class="en">Once authentication, stored data, and orders connect, each new feature touches shapes defined somewhere else. The AI edits one side, forgets the other, and the mismatch ships silently.</span><span class="ko">인증, 저장된 데이터, 주문이 연결되면 새 기능마다 다른 곳에 정의된 데이터 형태를 건드리게 된다. AI는 한쪽만 고치고 다른 쪽을 잊고, 그 어긋남은 조용히 배포된다.</span></p>
+      </div>
+      <div class="card">
+        <span class="tag good"><span class="en">THE FIX</span><span class="ko">해법</span></span>
+        <h3><span class="en">Decide the stack first</span><span class="ko">스택을 먼저 정한다</span></h3>
+        <p class="muted"><span class="en">Pick a stack where the data&rsquo;s shape is defined once and checked everywhere. Then the compiler — not a human reviewer — becomes the AI&rsquo;s supervisor.</span><span class="ko">데이터 형태를 한 번 정의하고 모든 곳에서 검사하는 스택을 고른다. 그러면 사람의 리뷰어가 아니라 컴파일러가 AI의 감독자가 된다.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2. THE STACK ================= -->
+  <section id="stack">
+    <div class="sec-head">
+      <span class="sec-no">02</span>
+      <h2><span class="en">The stack: seven pieces, one language</span><span class="ko">스택 구성: 일곱 조각, 하나의 언어</span></h2>
+      <p class="sec-lede">
+        <span class="en">T3 is not a framework of its own. It is a curated set of TypeScript-first tools, scaffolded by <code>create-t3-app</code>. Every piece is optional — include only what the service needs.</span>
+        <span class="ko">T3는 그 자체로 하나의 프레임워크가 아니다. <code>create-t3-app</code>이 한 번에 설치해주는, TypeScript 중심 도구들의 조합이다. 모든 구성품은 선택 사항이라 서비스에 필요한 것만 넣으면 된다.</span>
+      </p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:26%"><span class="en">Piece</span><span class="ko">구성품</span></th>
+            <th><span class="en">Role</span><span class="ko">역할</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="piece"><span class="mono">Next.js</span></td>
+            <td><span class="en">Web screens plus server functions in one project (App Router or Pages Router).</span><span class="ko">웹 화면과 서버 기능을 한 프로젝트에서 담당한다 (App Router 또는 Pages Router).</span></td>
+          </tr>
+          <tr>
+            <td class="piece"><span class="mono">TypeScript</span></td>
+            <td><span class="en">Checks the shape of data in code, end to end — the thread that ties the stack together.</span><span class="ko">코드 안에서 데이터 형태를 끝에서 끝까지 검사한다. 스택 전체를 잇는 실이다.</span></td>
+          </tr>
+          <tr>
+            <td class="piece"><span class="mono">Tailwind CSS</span></td>
+            <td><span class="en">Screen design with utility classes, directly in the markup.</span><span class="ko">마크업 안에서 유틸리티 클래스로 화면을 디자인한다.</span></td>
+          </tr>
+          <tr>
+            <td class="piece"><span class="mono">tRPC</span></td>
+            <td><span class="en">Type-safe data connection between screen and server. No code generation, no REST schema to drift out of sync.</span><span class="ko">화면과 서버 사이의 타입 안전한 데이터 연결. 코드 생성도, 어긋날 REST 스키마도 없다.</span></td>
+          </tr>
+          <tr>
+            <td class="piece"><span class="mono">Prisma / Drizzle</span></td>
+            <td><span class="en">Database access and data modeling. The schema here is the single source of truth for data shapes.</span><span class="ko">데이터베이스 접근과 데이터 모델링. 여기서 정의한 스키마가 데이터 형태의 유일한 기준이 된다.</span></td>
+          </tr>
+          <tr>
+            <td class="piece"><span class="mono">NextAuth.js</span></td>
+            <td><span class="en">Login and authentication (now also known as Auth.js).</span><span class="ko">로그인과 인증을 담당한다 (현재 Auth.js로도 불린다).</span></td>
+          </tr>
+          <tr>
+            <td class="piece"><span class="mono">Zod</span></td>
+            <td><span class="en">Runtime validation of data inputs — types check at build time, Zod checks real data at run time. Also validates environment variables via <code>t3-env</code>.</span><span class="ko">데이터 입력값의 런타임 검증. 타입이 빌드 시점에 검사한다면, Zod는 실제 데이터를 실행 시점에 검사한다. <code>t3-env</code>로 환경 변수 검증에도 쓰인다.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= 3. TYPE SAFETY ================= -->
+  <section id="typesafety">
+    <div class="sec-head">
+      <span class="sec-no">03</span>
+      <h2><span class="en">Why it works: one type, end to end</span><span class="ko">왜 통하는가: 끝까지 이어지는 하나의 타입</span></h2>
+      <p class="sec-lede">
+        <span class="en">The schema is defined once in the database layer. tRPC infers the server&rsquo;s types on the client automatically, so the screen and the server can never quietly disagree about a shape.</span>
+        <span class="ko">스키마는 데이터베이스 층에서 한 번만 정의한다. tRPC가 서버의 타입을 클라이언트에 자동으로 추론해주므로, 화면과 서버가 데이터 형태를 두고 조용히 어긋날 수 없다.</span>
+      </p>
+    </div>
+
+    <div class="flow" role="img" aria-label="Data flow: Database, Prisma or Drizzle, tRPC procedures with Zod, Next.js UI">
+      <div class="node"><div class="n-name"><span class="en">Database</span><span class="ko">데이터베이스</span></div><div class="n-sub">PostgreSQL · MySQL · SQLite</div></div>
+      <div class="arrow">→<span></span></div>
+      <div class="node"><div class="n-name">Prisma / Drizzle</div><div class="n-sub">schema = source of truth</div></div>
+      <div class="arrow">→<span></span></div>
+      <div class="node"><div class="n-name">tRPC + Zod</div><div class="n-sub">procedures · input validation</div></div>
+      <div class="arrow">→<span></span></div>
+      <div class="node"><div class="n-name">Next.js UI</div><div class="n-sub">types inferred, not re-typed</div></div>
+    </div>
+    <p class="flow-note">
+      <span class="en">Change a field on the left, and every place that still uses the old shape lights up as a compile error on the right — before anything runs.</span>
+      <span class="ko">왼쪽에서 필드 하나를 바꾸면, 옛 형태를 그대로 쓰는 모든 곳이 오른쪽에서 컴파일 오류로 표시된다. 실행해보기 전에 알 수 있다.</span>
+    </p>
+
+    <h3><span class="en">Two mistakes the type checker catches for you</span><span class="ko">타입 검사가 대신 잡아주는 실수 두 가지</span></h3>
+    <p class="muted">
+      <span class="en">Try it: run the type check on the hand-written version, then on the T3 version.</span>
+      <span class="ko">직접 눌러보자. 손으로 타입을 따로 적은 버전과 T3 방식으로 연결한 버전을 각각 타입 검사해보는 데모다.</span>
+    </p>
+
+    <div class="demo-bar">
+      <button type="button" class="runbtn" id="btn-check-bad"><span class="en">Run typecheck — hand-written types</span><span class="ko">타입 검사 실행 — 따로 적은 타입</span></button>
+      <button type="button" class="runbtn secondary" id="btn-check-good"><span class="en">Run typecheck — T3 connected types</span><span class="ko">타입 검사 실행 — T3로 연결한 타입</span></button>
+      <span class="demo-status" id="demo-status" aria-live="polite"></span>
+    </div>
+
+    <div class="codeblock">
+      <div class="cb-head"><span class="fname">order.ts</span><span><span class="en">Example 1 — the price that changed type</span><span class="ko">예시 1 — 타입이 바뀐 가격</span></span></div>
+      <pre><span class="c">// server — price is a number</span>
+<span class="k">const</span> item = { name: <span class="s">"Burger set"</span>, price: <span class="t">10000</span> };
+
+<span class="c">// screen — the AI re-typed it by hand, as a string</span>
+<span class="k">const</span> payload = { price: <span class="s">"10000"</span> };
+submitOrder(payload);</pre>
+      <div class="errline" id="err-1"><span class="x">✗</span> <span class="en">error TS2345: Type &lsquo;string&rsquo; is not assignable to type &lsquo;number&rsquo;. A person reads 10000 and "10000" as the same value — a program does not.</span><span class="ko">error TS2345: &lsquo;string&rsquo; 타입은 &lsquo;number&rsquo; 타입에 할당할 수 없다. 사람은 10000과 "10000"을 같은 값으로 읽지만, 프로그램은 다르게 읽는다.</span></div>
+      <div class="okline" id="ok-1"><span class="en">✓ With tRPC, the screen never re-types the shape — it infers <span class="mono">price: number</span> from the server, so the string version cannot be written in the first place.</span><span class="ko">✓ tRPC를 쓰면 화면이 형태를 다시 적지 않는다. 서버에서 <span class="mono">price: number</span>를 추론하므로, 문자열 버전은 처음부터 쓸 수 없다.</span></div>
+    </div>
+
+    <div class="codeblock">
+      <div class="cb-head"><span class="fname">profile.ts</span><span><span class="en">Example 2 — the renamed field</span><span class="ko">예시 2 — 이름이 바뀐 필드</span></span></div>
+      <pre><span class="c">// database — field renamed: name → username</span>
+<span class="k">model</span> User { id <span class="t">Int</span>; username <span class="t">String</span> }
+
+<span class="c">// screen — still using the old field</span>
+&lt;p&gt;{user.<span class="t">name</span>}&lt;/p&gt;</pre>
+      <div class="errline" id="err-2"><span class="x">✗</span> <span class="en">error TS2339: Property &lsquo;name&rsquo; does not exist on type &lsquo;User&rsquo;. Without connected types this is a silent blank on the page; with them, it is a compile error the AI must fix.</span><span class="ko">error TS2339: &lsquo;User&rsquo; 타입에 &lsquo;name&rsquo; 속성이 없다. 타입이 연결돼 있지 않으면 화면에 조용히 빈칸으로 남지만, 연결돼 있으면 AI가 반드시 고쳐야 하는 컴파일 오류가 된다.</span></div>
+      <div class="okline" id="ok-2"><span class="en">✓ The rename propagates through Prisma → tRPC → UI as one type. Every stale usage is listed by the compiler, not hunted down by a person at runtime.</span><span class="ko">✓ 이름 변경이 Prisma → tRPC → UI까지 하나의 타입으로 전파된다. 낡은 사용처는 사람이 실행 중에 찾아다니는 게 아니라 컴파일러가 전부 목록으로 보여준다.</span></div>
+    </div>
+  </section>
+
+  <!-- ================= 4. SCAFFOLD ================= -->
+  <section id="scaffold">
+    <div class="sec-head">
+      <span class="sec-no">04</span>
+      <h2><span class="en">Start: one command, then commit</span><span class="ko">시작: 명령어 한 줄, 그리고 커밋</span></h2>
+      <p class="sec-lede">
+        <span class="en">You need Node.js 20 or newer and one package manager (npm, yarn, pnpm, or bun). The CLI asks a few questions — TypeScript, Tailwind, tRPC, authentication, ORM, App Router, and the <code>~/</code> import alias — and generates the whole structure.</span>
+        <span class="ko">Node.js 20 이상과 패키지 매니저 하나(npm, yarn, pnpm, bun 중)가 필요하다. CLI가 TypeScript, Tailwind, tRPC, 인증, ORM, App Router, <code>~/</code> 임포트 별칭을 물어본 뒤 전체 구조를 생성한다.</span>
+      </p>
+    </div>
+    <div class="codeblock">
+      <div class="cb-head"><span class="fname">terminal</span></div>
+      <pre><span class="t">$</span> npm create t3-app@latest
+<span class="t">$</span> cd my-app
+<span class="t">$</span> git add -A &amp;&amp; git commit -m <span class="s">"clean T3 scaffold"</span>
+  <span class="c"># commit BEFORE any feature work</span></pre>
+    </div>
+    <p class="muted">
+      <span class="en">Growing into a monorepo — for example a web app plus a mobile app sharing one API? Use <a href="https://github.com/t3-oss/create-t3-turbo" target="_blank" rel="noopener"><code>create-t3-turbo</code></a> instead, which wraps the same stack in Turborepo with Expo React Native support.</span>
+      <span class="ko">웹 앱과 모바일 앱이 API 하나를 공유하는 모노레포로 키울 계획이라면 <a href="https://github.com/t3-oss/create-t3-turbo" target="_blank" rel="noopener"><code>create-t3-turbo</code></a>를 쓴다. 같은 스택을 Turborepo로 감싼 버전이며 Expo React Native를 지원한다.</span>
+    </p>
+  </section>
+
+  <!-- ================= 5. AI RULES ================= -->
+  <section id="rules">
+    <div class="sec-head">
+      <span class="sec-no">05</span>
+      <h2><span class="en">The AI rules: one instruction that does the guarding</span><span class="ko">AI 규칙: 감독을 맡는 지시문 한 줄</span></h2>
+      <p class="sec-lede">
+        <span class="en">The rule from the original post is short enough to paste at the start of every AI coding session. It works because each clause maps to a check the toolchain can actually enforce.</span>
+        <span class="ko">원글에서 제시한 규칙은 짧아서 AI 코딩 세션을 시작할 때마다 그대로 붙여 넣을 수 있다. 각 문장이 도구 체인이 실제로 강제할 수 있는 검사와 연결되기 때문에 통한다.</span>
+      </p>
+    </div>
+
+    <div class="rulecard">
+      <blockquote id="rule-en">&ldquo;Develop while maintaining the existing T3 Stack structure. Validate data inputs with Zod, and write it so it passes the type check. Don&rsquo;t bypass errors with the any type.&rdquo;</blockquote>
+      <p class="rule-ko" id="rule-ko">&ldquo;기존 T3 Stack 구조를 유지하면서 개발해 줘. 데이터 입력값은 Zod로 검증하고, 타입 검사를 통과하도록 작성해 줘. any 타입으로 오류를 우회하지 마.&rdquo;</p>
+      <div class="rule-actions">
+        <button type="button" class="copybtn" data-copy-target="rule-en"><span class="en">Copy English rule</span><span class="ko">영문 규칙 복사</span></button>
+        <button type="button" class="copybtn" data-copy-target="rule-ko"><span class="en">Copy Korean rule</span><span class="ko">한글 규칙 복사</span></button>
+      </div>
+    </div>
+
+    <div class="rulepoints">
+      <div class="rulepoint">
+        <span class="rp-n">RULE 1</span>
+        <h3><span class="en">Keep the structure</span><span class="ko">구조를 유지한다</span></h3>
+        <p><span class="en">The AI works inside the scaffold&rsquo;s folders and patterns instead of inventing its own layout per feature. Consistency is what makes the types connect.</span><span class="ko">AI가 기능마다 자기 방식의 배치를 만들지 않고, 스캐폴드가 정한 폴더와 패턴 안에서 작업한다. 그 일관성이 타입 연결을 가능하게 한다.</span></p>
+      </div>
+      <div class="rulepoint">
+        <span class="rp-n">RULE 2</span>
+        <h3><span class="en">Validate with Zod</span><span class="ko">Zod로 검증한다</span></h3>
+        <p><span class="en">Every tRPC procedure declares a Zod input schema. Unvalidated input never crosses a procedure boundary — types alone can&rsquo;t check real user data.</span><span class="ko">모든 tRPC 프로시저는 Zod 입력 스키마를 선언한다. 검증되지 않은 입력은 프로시저 경계를 넘지 않는다. 타입만으로는 실제 사용자 데이터를 검사할 수 없기 때문이다.</span></p>
+      </div>
+      <div class="rulepoint">
+        <span class="rp-n">RULE 3</span>
+        <h3><span class="en">No <code>any</code>, no silencing</span><span class="ko"><code>any</code> 금지, 오류를 잠재우지 않는다</span></h3>
+        <p><span class="en"><code>any</code> and stray <code>@ts-ignore</code> comments switch the checker off exactly where it matters. A type error is the AI&rsquo;s signal to fix its own change — if the type is genuinely unknown, narrow it with Zod first.</span><span class="ko"><code>any</code>와 무분별한 <code>@ts-ignore</code>는 정작 중요한 지점에서 검사기를 꺼버린다. 타입 오류는 AI가 자기 변경을 고치라는 신호다. 타입을 정말 모르는 값이라면 먼저 Zod로 좁힌 뒤 타입을 정한다.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 6. WORKFLOW ================= -->
+  <section id="workflow">
+    <div class="sec-head">
+      <span class="sec-no">06</span>
+      <h2><span class="en">Workflow: the order matters</span><span class="ko">워크플로: 순서가 중요하다</span></h2>
+      <p class="sec-lede">
+        <span class="en">Six steps, in this order. The pattern underneath all of them: define shapes once, let the tools check every use.</span>
+        <span class="ko">여섯 단계, 이 순서대로. 전체를 관통하는 원칙은 하나다. 형태는 한 번 정의하고, 사용하는 모든 곳은 도구가 검사하게 한다.</span>
+      </p>
+    </div>
+    <ol class="steps">
+      <li>
+        <span class="num" aria-hidden="true"></span>
+        <div>
+          <h3><span class="en">Scaffold, then commit the clean state</span><span class="ko">스캐폴드하고, 깨끗한 상태를 먼저 커밋한다</span></h3>
+          <p><span class="en">Run <code>create-t3-app</code> and commit before any feature work, so every later change is measured against a known-good structure.</span><span class="ko"><code>create-t3-app</code>을 실행하고 기능을 붙이기 전에 커밋한다. 이후의 모든 변경을 정상 구조와 비교할 수 있게 하기 위해서다.</span></p>
+        </div>
+      </li>
+      <li>
+        <span class="num" aria-hidden="true"></span>
+        <div>
+          <h3><span class="en">Define the data model first</span><span class="ko">데이터 모델부터 정의한다</span></h3>
+          <p><span class="en">Write the Prisma schema or Drizzle tables before screens. The schema is the single source of truth for shapes — everything else derives from it.</span><span class="ko">화면보다 먼저 Prisma 스키마나 Drizzle 테이블을 쓴다. 스키마가 형태의 유일한 기준이고, 나머지는 전부 거기서 파생된다.</span></p>
+        </div>
+      </li>
+      <li>
+        <span class="num" aria-hidden="true"></span>
+        <div>
+          <h3><span class="en">Add tRPC procedures with Zod inputs</span><span class="ko">Zod 입력을 갖춘 tRPC 프로시저를 추가한다</span></h3>
+          <p><span class="en">Each procedure validates its input with a Zod schema. Never accept unvalidated input at a procedure boundary.</span><span class="ko">각 프로시저는 Zod 스키마로 입력을 검증한다. 프로시저 경계에서 검증되지 않은 입력은 절대 받지 않는다.</span></p>
+        </div>
+      </li>
+      <li>
+        <span class="num" aria-hidden="true"></span>
+        <div>
+          <h3><span class="en">Build screens on inferred types</span><span class="ko">추론된 타입 위에서 화면을 만든다</span></h3>
+          <p><span class="en">The UI consumes the tRPC client&rsquo;s inferred types. Do not redeclare the same shapes by hand on the client — a hand-written duplicate is exactly where drift starts.</span><span class="ko">UI는 tRPC 클라이언트가 추론한 타입을 그대로 쓴다. 클라이언트에서 같은 형태를 손으로 다시 선언하지 않는다. 손으로 적은 중복 정의가 바로 어긋남이 시작되는 곳이다.</span></p>
+        </div>
+      </li>
+      <li>
+        <span class="num" aria-hidden="true"></span>
+        <div>
+          <h3><span class="en">Typecheck and build after every feature</span><span class="ko">기능마다 타입 검사와 빌드를 돌린다</span></h3>
+          <p><span class="en">Run <code>npm run typecheck</code> and the build after each feature. Treat a type error as the AI&rsquo;s instruction to fix its change, not as noise to silence.</span><span class="ko">기능을 하나 붙일 때마다 <code>npm run typecheck</code>와 빌드를 실행한다. 타입 오류는 잠재울 소음이 아니라, AI가 자기 변경을 고치라는 지시로 취급한다.</span></p>
+        </div>
+      </li>
+      <li>
+        <span class="num" aria-hidden="true"></span>
+        <div>
+          <h3><span class="en">Never bypass with <code>any</code></span><span class="ko"><code>any</code>로 우회하지 않는다</span></h3>
+          <p><span class="en">No <code>any</code> to dodge an error, and no <code>@ts-ignore</code> / <code>@ts-expect-error</code> without a written reason in a comment. Unknown data gets narrowed with Zod, then typed.</span><span class="ko">오류를 피하려고 <code>any</code>를 쓰지 않고, 코멘트에 이유를 적지 않은 <code>@ts-ignore</code> / <code>@ts-expect-error</code>도 쓰지 않는다. 모르는 데이터는 Zod로 좁힌 뒤 타입을 정한다.</span></p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================= 7. WHEN ================= -->
+  <section id="when">
+    <div class="sec-head">
+      <span class="sec-no">07</span>
+      <h2><span class="en">When to use it — and when to skip it</span><span class="ko">쓸 때와 건너뛸 때</span></h2>
+    </div>
+    <div class="grid2">
+      <div class="usecard yes">
+        <h3><span class="en">Use T3 when</span><span class="ko">T3가 맞는 경우</span></h3>
+        <ul>
+          <li><span class="en"><b>The service keeps growing:</b> signup, stored data, a dashboard, orders, order history — features that share data shapes.</span><span class="ko"><b>서비스가 계속 자라는 경우:</b> 회원가입, 데이터 저장, 대시보드, 주문, 주문 내역처럼 데이터 형태를 공유하는 기능들.</span></li>
+          <li><span class="en"><b>An AI writes most of the code:</b> the more code is delegated, the more the project needs a structure that verifies the rules the code must follow.</span><span class="ko"><b>AI가 코드 대부분을 쓰는 경우:</b> 위임하는 코드가 많을수록, 코드가 지켜야 할 규칙을 검증해주는 구조가 더 필요해진다.</span></li>
+          <li><span class="en"><b>You already build with Next.js + TypeScript:</b> the frontend half is familiar; tRPC, Prisma, and NextAuth are the only new pieces.</span><span class="ko"><b>이미 Next.js + TypeScript로 만들고 있는 경우:</b> 프론트엔드 절반은 익숙하고, 새로 배우는 조각은 tRPC, Prisma, NextAuth뿐이다.</span></li>
+        </ul>
+      </div>
+      <div class="usecard no">
+        <h3><span class="en">Skip T3 when</span><span class="ko">건너뛰는 경우</span></h3>
+        <ul>
+          <li><span class="en"><b>It&rsquo;s a simple intro or landing page:</b> Next.js + Tailwind CSS alone is enough. There is no shared shape to protect.</span><span class="ko"><b>단순한 소개·랜딩 페이지인 경우:</b> Next.js + Tailwind CSS만으로 충분하다. 지킬 공유 형태 자체가 없다.</span></li>
+          <li><span class="en"><b>The codebase already runs on another stack:</b> don&rsquo;t force a migration to T3. The benefit comes from starting connected, not from the brand name.</span><span class="ko"><b>이미 다른 스택으로 돌고 있는 코드베이스인 경우:</b> T3로 억지 마이그레이션하지 않는다. 이점은 이름이 아니라 처음부터 연결된 구조에서 나온다.</span></li>
+          <li><span class="en"><b>You expect type checking to be a security boundary:</b> it isn&rsquo;t. Auth rules, authorization checks, and input validation still need explicit design.</span><span class="ko"><b>타입 검사를 보안 경계로 기대하는 경우:</b> 타입 검사는 보안이 아니다. 인증 규칙, 권한 검사, 입력 검증은 별도로 명시적으로 설계해야 한다.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="callout">
+      <p><span class="en"><b>Keep in mind:</b> payments are not part of the T3 Stack itself. A T3 app takes payments by integrating Stripe — see the <code>t3-stripe</code> example below — the same way any Next.js app would.</span><span class="ko"><b>기억할 점:</b> 결제는 T3 Stack 자체의 구성품이 아니다. T3 앱은 다른 Next.js 앱과 마찬가지로 Stripe를 연동해 결제를 받는다. 아래 <code>t3-stripe</code> 예시를 참고하면 된다.</span></p>
+    </div>
+  </section>
+
+  <!-- ================= 8. THE SKILL ================= -->
+  <section id="skill">
+    <div class="sec-head">
+      <span class="sec-no">08</span>
+      <h2><span class="en">The skill: these rules, packaged for an AI agent</span><span class="ko">스킬: 이 규칙을 AI 에이전트용으로 묶은 것</span></h2>
+      <p class="sec-lede">
+        <span class="en">Everything on this page has been packaged as a reusable agent skill, <code>local-t3-stack-vibe-coding</code>. Drop it into an agent&rsquo;s skill folder and the agent applies the stack, the scaffold, the AI rules, and the workflow automatically whenever a T3 project comes up — no re-explaining per session.</span>
+        <span class="ko">이 페이지의 모든 내용은 재사용 가능한 에이전트 스킬 <code>local-t3-stack-vibe-coding</code>으로 묶여 있다. 에이전트의 스킬 폴더에 넣어두면, T3 프로젝트가 나올 때마다 스택·스캐폴드·AI 규칙·워크플로를 세션마다 다시 설명할 필요 없이 자동으로 적용한다.</span>
+      </p>
+    </div>
+
+    <div class="skill-head">
+      <span class="skill-badge">local-t3-stack-vibe-coding · SKILL.md</span>
+    </div>
+
+    <div class="grid3" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="en">What&rsquo;s inside</span><span class="ko">담긴 내용</span></h3>
+        <p class="muted"><span class="en">The stack table, the scaffold command and requirements, the verbatim AI rules in English and Korean, the six-step workflow, both type-safety examples, and the use-it / skip-it criteria.</span><span class="ko">스택 구성표, 스캐폴드 명령어와 필요 환경, 영문·한글 AI 규칙 원문, 6단계 워크플로, 타입 안전성 예시 두 가지, 그리고 쓸 때와 건너뛸 때의 기준.</span></p>
+      </div>
+      <div class="card">
+        <h3><span class="en">When it triggers</span><span class="ko">언제 발동하나</span></h3>
+        <p class="muted"><span class="en">Whenever a task involves building or extending a full-stack TypeScript app with the T3 Stack — or whenever AI-written code must stay type-safe as it grows.</span><span class="ko">T3 Stack으로 풀스택 TypeScript 앱을 만들거나 확장할 때, 또는 AI가 쓴 코드가 자라면서도 타입 안전성을 유지해야 할 때 발동한다.</span></p>
+      </div>
+      <div class="card">
+        <h3><span class="en">Plugs into sdlc-runner</span><span class="ko">sdlc-runner 연동</span></h3>
+        <p class="muted"><span class="en">The skill serves as the coding-rules input of the <code>sdlc-runner</code> pipeline: the plan step names T3 as the stack, the code step receives the AI rules, and the test/CI gate runs typecheck + build and stops the pipeline on failure. The human approval gate stays as it is.</span><span class="ko">이 스킬은 <code>sdlc-runner</code> 파이프라인의 코딩 규칙 입력으로 쓰인다. 계획 단계가 스택을 T3로 지정하고, 코드 단계가 AI 규칙을 받으며, 테스트/CI 게이트가 typecheck + 빌드를 돌려 실패하면 파이프라인을 멈춘다. 인간 승인 게이트는 그대로 유지된다.</span></p>
+      </div>
+    </div>
+
+    <details class="skillfile" id="skill-details">
+      <summary>
+        <span class="mono" style="font-size:14px">SKILL.md</span>
+        <span class="muted small"><span class="en">— full skill file, ready to copy or download</span><span class="ko">— 스킬 파일 전체, 복사·다운로드 가능</span></span>
+        <span class="chev" aria-hidden="true">▾</span>
+      </summary>
+      <div class="skill-body">
+        <pre id="skill-pre" tabindex="0"></pre>
+        <div class="skill-actions">
+          <button type="button" class="copybtn solid" id="btn-copy-skill"><span class="en">Copy SKILL.md</span><span class="ko">SKILL.md 복사</span></button>
+          <button type="button" class="copybtn light" id="btn-download-skill"><span class="en">Download SKILL.md</span><span class="ko">SKILL.md 다운로드</span></button>
+        </div>
+      </div>
+    </details>
+    <p class="muted small" style="margin-top:12px">
+      <span class="en">To use it: save the file as <code>SKILL.md</code> in a folder named <code>local-t3-stack-vibe-coding</code> inside your agent&rsquo;s skills directory. The <code>name</code> and <code>description</code> in the frontmatter are what the agent reads to decide when the skill applies.</span>
+      <span class="ko">사용법: 에이전트의 스킬 디렉터리 안에 <code>local-t3-stack-vibe-coding</code> 폴더를 만들고 그 안에 <code>SKILL.md</code>로 저장한다. 파일 맨 앞의 <code>name</code>과 <code>description</code>이 에이전트가 스킬 적용 시점을 판단하는 기준이다.</span>
+    </p>
+  </section>
+
+  <!-- ================= 9. REPOS ================= -->
+  <section id="repos">
+    <div class="sec-head">
+      <span class="sec-no">09</span>
+      <h2><span class="en">Repositories worth bookmarking</span><span class="ko">북마크해둘 레포</span></h2>
+      <p class="sec-lede">
+        <span class="en">The official scaffold, its monorepo variant, and two working examples — payments and a real small-business-style product.</span>
+        <span class="ko">공식 스캐폴드, 모노레포 버전, 그리고 실제로 동작하는 예시 두 개 — 결제 연동과 소상공인형 제품이다.</span>
+      </p>
+    </div>
+    <div class="grid2">
+      <a class="repo" href="https://github.com/t3-oss/create-t3-app" target="_blank" rel="noopener">
+        <span class="r-name">t3-oss/create-t3-app</span>
+        <p><span class="en">The official CLI and the stack&rsquo;s definition. Start every T3 project here.</span><span class="ko">공식 CLI이자 스택의 정의 그 자체. 모든 T3 프로젝트는 여기서 시작한다.</span></p>
+        <span class="r-meta">MIT · ★ 29k+</span>
+      </a>
+      <a class="repo" href="https://github.com/t3-oss/create-t3-turbo" target="_blank" rel="noopener">
+        <span class="r-name">t3-oss/create-t3-turbo</span>
+        <p><span class="en">The T3 Stack as a Turborepo monorepo, with Expo React Native support for a mobile app next to the web app.</span><span class="ko">Turborepo 모노레포 버전의 T3 Stack. 웹 앱 옆에 모바일 앱을 붙일 때의 Expo React Native 지원 포함.</span></p>
+        <span class="r-meta">Turborepo · Expo</span>
+      </a>
+      <a class="repo" href="https://github.com/nramkissoon/t3-stripe" target="_blank" rel="noopener">
+        <span class="r-name">nramkissoon/t3-stripe</span>
+        <p><span class="en">A Stripe payment integration example built on create-t3-app — the reference for adding checkout to a T3 service.</span><span class="ko">create-t3-app 위에 Stripe 결제를 연동한 예시. T3 서비스에 결제창을 붙일 때의 참고 자료.</span></p>
+        <span class="r-meta">Stripe · payments example</span>
+      </a>
+      <a class="repo" href="https://github.com/kaje94/menufic" target="_blank" rel="noopener">
+        <span class="r-name">kaje94/menufic</span>
+        <p><span class="en">A restaurant digital-menu generator built on the T3 Stack — proof the stack fits small-business products, not just demos.</span><span class="ko">T3 Stack으로 만든 식당 디지털 메뉴 생성기. 이 스택이 데모가 아닌 소상공인 제품에도 맞는다는 증거.</span></p>
+        <span class="r-meta"><span class="en">restaurant menus · real product</span><span class="ko">식당 메뉴 · 실제 제품</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= 10. FIT ================= -->
+  <section id="fit">
+    <div class="sec-head">
+      <span class="sec-no">10</span>
+      <h2><span class="en">Where this fits: a small-business ordering SaaS</span><span class="ko">어디에 맞나: 소상공인 직접 주문 SaaS</span></h2>
+    </div>
+    <div class="card">
+      <p>
+        <span class="en">A direct-ordering service for small shops needs exactly four things to work: <b>login, a database, orders, and a dashboard</b>. Those are four of the T3 pieces, off the shelf. Add Stripe for payment and the backend shape is complete — which is why this stack pairs well with the build-it-by-assembling approach: the parts exist, they are type-connected, and an AI can extend them without quietly breaking the seams.</span>
+        <span class="ko">소상공인용 직접 주문 서비스가 동작하려면 정확히 네 가지가 필요하다. <b>로그인, 데이터베이스, 주문, 대시보드</b>. 이 넷은 T3 구성품 중 네 개와 그대로 겹친다. 여기에 결제로 Stripe를 붙이면 백엔드 형태가 완성된다. 그래서 이 스택은 &lsquo;조립해서 만드는&rsquo; 접근과 잘 맞는다. 부품이 이미 있고, 타입으로 연결돼 있으며, AI가 확장해도 연결 부위가 조용히 깨지지 않는다.</span>
+      </p>
+      <p style="margin-bottom:0">
+        <span class="en">It also builds on a familiar base: existing Next.js + React + TypeScript side projects already cover the frontend half of T3. The genuinely new pieces to learn are tRPC, Prisma/Drizzle, and NextAuth.js — three tools, not a new language.</span>
+        <span class="ko">익숙한 기반 위에 올라간다는 점도 있다. 기존의 Next.js + React + TypeScript 사이드 프로젝트가 이미 T3의 프론트엔드 절반을 커버한다. 새로 배울 조각은 tRPC, Prisma/Drizzle, NextAuth.js 셋뿐이다. 새 언어가 아니라 도구 세 개다.</span>
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      <span class="en">Sources: the T3 Stack as defined by <a href="https://github.com/t3-oss/create-t3-app" target="_blank" rel="noopener">t3-oss/create-t3-app</a> (MIT), and the AI development rule quoted from the original Threads post that prompted this guide. The skill file above is <span class="mono">local-t3-stack-vibe-coding</span>.</span>
+      <span class="ko">출처: <a href="https://github.com/t3-oss/create-t3-app" target="_blank" rel="noopener">t3-oss/create-t3-app</a>(MIT)이 정의한 T3 Stack, 그리고 이 가이드를 쓰게 한 원본 스레드 글의 AI 개발 규칙 인용. 위 스킬 파일은 <span class="mono">local-t3-stack-vibe-coding</span>이다.</span>
+    </p>
+    <p>
+      <span class="en">Hosting this page: it is a single self-contained HTML file — commit it as <span class="mono">index.html</span> in any GitHub repository and enable Pages (Settings → Pages → Deploy from a branch) to serve it.</span>
+      <span class="ko">이 페이지 호스팅: 파일 하나로 완결된 HTML이다. 어떤 깃헙 레포에든 <span class="mono">index.html</span>로 커밋하고 Pages를 켜면(Settings → Pages → Deploy from a branch) 바로 서빙된다.</span>
+    </p>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- The full skill file, kept as plain text: rendered into the <pre> above,
+     and used verbatim by the Copy / Download buttons. -->
+<script type="text/plain" id="skill-md">---
+name: local-t3-stack-vibe-coding
+description: This skill should be used when building or extending a full-stack TypeScript web app with the T3 Stack (Next.js, TypeScript, Tailwind CSS, tRPC, Prisma or Drizzle, NextAuth.js, Zod) — especially when an AI coding agent writes the code (vibe coding). Covers scaffolding with create-t3-app, the AI development rules (keep the T3 structure, validate inputs with Zod, pass the type check, never bypass errors with any), the end-to-end type-safety workflow, and when to use or skip T3. Use it when the user asks for T3 Stack development, a typesafe Next.js full-stack setup, or rules for AI-written code that must stay type-safe.
+---
+
+# T3 Stack Vibe Coding
+
+## Purpose
+
+Build full-stack TypeScript web apps where the AI writes most of the code, without the code tangling as features grow. The T3 Stack keeps one type definition flowing from the database through the server to the screen, so the type checker — not the human — catches mismatches the AI introduces.
+
+## The stack
+
+| Piece | Role |
+|---|---|
+| Next.js | Web screens + server functions (App Router or Pages Router) |
+| TypeScript | Data-format checking in code, end to end |
+| Tailwind CSS | Screen design |
+| tRPC | Type-safe data connection between screen and server (no codegen, no REST schema drift) |
+| Prisma or Drizzle | Database data management |
+| NextAuth.js (Auth.js) | Login / authentication |
+| Zod | Runtime validation of data inputs; also validates env vars via t3-env |
+
+Source of truth: `t3-oss/create-t3-app` (MIT, ~29,000 stars). Every piece is optional — pick only what the service needs.
+
+## Scaffold
+
+Requirements: Node.js 20 or newer, one package manager (npm / yarn / pnpm / bun).
+
+```bash
+npm create t3-app@latest
+```
+
+Answer the interactive prompts (TypeScript, Tailwind, tRPC, auth, ORM, App Router, import alias `~/`). For a monorepo with a mobile app, use `create-t3-turbo` instead.
+
+## AI development rules (give these to the coding agent, verbatim)
+
+> Develop while maintaining the existing T3 Stack structure. Validate data inputs with Zod, and write it so it passes the type check. Don't bypass errors with the any type.
+
+Korean original (from the source post):
+
+> 기존 T3 Stack 구조를 유지하면서 개발해 줘. 데이터 입력값은 Zod로 검증하고, 타입 검사를 통과하도록 작성해 줘. any 타입으로 오류를 우회하지 마.
+
+## Workflow
+
+1. Scaffold with `create-t3-app`; commit the clean scaffold before any feature work.
+2. Define the data model first (Prisma schema or Drizzle tables). The schema is the single source of truth for shapes.
+3. Add tRPC procedures with Zod input schemas. Never accept unvalidated input at a procedure boundary.
+4. Build screens against the tRPC client's inferred types. Do not redeclare the same shapes by hand on the client — a hand-written duplicate is where drift starts.
+5. Run the type check (`npm run typecheck`) and the build after every feature. Treat a type error as the AI's signal to fix its own change, not as something to silence.
+6. Never use `any` to bypass an error, and never add `// @ts-ignore` / `// @ts-expect-error` without a written reason in a comment. If the type is genuinely unknown, narrow it with Zod first, then type the result.
+
+## Why this catches AI mistakes: two canonical examples
+
+- Price type: server defines `price = 10000` (number); the screen sends `price = "10000"` (string). A person reads them as the same value; a program does not. With tRPC the server's type is inferred on the screen, so the mismatch fails the type check before anything runs.
+- Rename: the database field changes from `name` to `username`, but the screen still uses `name`. Where types are connected end to end, that is a compile error the AI must fix — not a silent runtime bug a person has to hunt down.
+
+## When to use it
+
+- A service where features keep growing: signup, data storage, dashboard, orders, order history.
+- Any project where AI writes most of the code: the more code is delegated, the more the project needs a structure that verifies the rules the code must follow.
+
+## When NOT to use it
+
+- A simple intro/landing page: Next.js + Tailwind CSS alone is enough.
+- A codebase that already runs on a different stack: do not force a migration to T3.
+- Type checking alone does not solve security or all errors. Auth rules, authorization checks, and input validation still need explicit design.
+
+## Integration with sdlc-runner
+
+Use this skill as the coding-rules input of the sdlc-runner pipeline: the plan step names T3 as the stack, the code step receives the AI development rules above, and the test/CI gate runs `typecheck` + build and stops the pipeline on failure. The skill does not replace the human approval gate.
+
+## Related repos (verified)
+
+- `t3-oss/create-t3-app` — the official CLI and stack definition.
+- `t3-oss/create-t3-turbo` — T3 as a Turborepo monorepo (Expo React Native support).
+- `nramkissoon/t3-stripe` — Stripe payment integration example on create-t3-app.
+- `kaje94/menufic` — restaurant digital-menu generator built on the T3 Stack.
+</script>
+
+<script>
+(function(){
+  "use strict";
+  var body = document.body;
+
+  /* ---------- language toggle (in-memory only) ---------- */
+  var btnEn = document.getElementById("btn-en");
+  var btnKo = document.getElementById("btn-ko");
+  function setLang(lang){
+    body.setAttribute("data-lang", lang);
+    document.documentElement.lang = (lang === "ko") ? "ko" : "en";
+    btnEn.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
+    btnKo.setAttribute("aria-pressed", lang === "ko" ? "true" : "false");
+  }
+  btnEn.addEventListener("click", function(){ setLang("en"); });
+  btnKo.addEventListener("click", function(){ setLang("ko"); });
+  function lang(){ return body.getAttribute("data-lang") || "en"; }
+
+  /* ---------- toast ---------- */
+  var toast = document.getElementById("toast");
+  var toastTimer = null;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 2200);
+  }
+
+  /* ---------- copy helpers ---------- */
+  function copyText(text, okMsg){
+    function done(){ showToast(okMsg); }
+    function fallback(){
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); done(); }
+      catch(e){ showToast(lang() === "ko" ? "복사에 실패했어요. 직접 선택해 복사해 주세요." : "Copy failed — please select and copy manually."); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else { fallback(); }
+  }
+  document.querySelectorAll("[data-copy-target]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var el = document.getElementById(btn.getAttribute("data-copy-target"));
+      if (!el) return;
+      var text = el.textContent.replace(/[\u201C\u201D]/g, "").trim();
+      copyText(text, lang() === "ko" ? "복사했어요" : "Copied to clipboard");
+    });
+  });
+
+  /* ---------- skill file: render, copy, download ---------- */
+  var skillText = document.getElementById("skill-md").textContent.replace(/^\n+/, "").replace(/\s+$/, "") + "\n";
+  document.getElementById("skill-pre").textContent = skillText;
+  document.getElementById("btn-copy-skill").addEventListener("click", function(){
+    copyText(skillText, lang() === "ko" ? "SKILL.md를 복사했어요" : "SKILL.md copied");
+  });
+  document.getElementById("btn-download-skill").addEventListener("click", function(){
+    var blob = new Blob([skillText], { type: "text/markdown;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = "SKILL.md";
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    showToast(lang() === "ko" ? "SKILL.md를 내려받고 있어요" : "Downloading SKILL.md");
+  });
+
+  /* ---------- typecheck demo ---------- */
+  var status = document.getElementById("demo-status");
+  var err1 = document.getElementById("err-1"), err2 = document.getElementById("err-2");
+  var ok1 = document.getElementById("ok-1"), ok2 = document.getElementById("ok-2");
+  var btnBad = document.getElementById("btn-check-bad");
+  var btnGood = document.getElementById("btn-check-good");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function runCheck(mode, btn){
+    btn.disabled = true;
+    err1.classList.remove("show"); err2.classList.remove("show");
+    ok1.classList.remove("show"); ok2.classList.remove("show");
+    status.textContent = lang() === "ko" ? "검사 중… tsc --noEmit" : "checking… tsc --noEmit";
+    var delay = reduceMotion ? 60 : 650;
+    setTimeout(function(){
+      btn.disabled = false;
+      if (mode === "bad"){
+        err1.classList.add("show"); err2.classList.add("show");
+        status.textContent = lang() === "ko" ? "✗ 오류 2건 — 실행 전에 잡혔다" : "✗ 2 errors — caught before anything ran";
+      } else {
+        ok1.classList.add("show"); ok2.classList.add("show");
+        status.textContent = lang() === "ko" ? "✓ 오류 없음 — 형태가 하나로 연결돼 있다" : "✓ no errors — the shape is connected end to end";
+      }
+    }, delay);
+  }
+  btnBad.addEventListener("click", function(){ runCheck("bad", btnBad); });
+  btnGood.addEventListener("click", function(){ runCheck("good", btnGood); });
+})();
+</script>
+</body>
+</html>
